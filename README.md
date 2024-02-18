@@ -19,3 +19,5 @@ https://du-portal-ui.dataudveksler.app.vd.dk/data?search=eyJxdWVyeSI6IiIsImRhdGF
 4. Should we create a new bus line based on people's travel patterns
 
 5. Which bus line has the most objects of interest along the route
+
+6. Could we make a new bus lines that would have more objects of interest along the route
