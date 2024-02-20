@@ -7,6 +7,10 @@ def get_data_from_path(path):
     root = tree.getroot()
     bus_data = { "routePoints": [], "routes": [], "destinationDisplays": [], "scheduledStopPoints": [], "serviceLinks": [], "lines": [] }
 
+    data = {
+        "line_name": "",
+    }
+
     dataObjectsTree = root.find(".//netex:dataObjects", namespace)
     routePointsTree = dataObjectsTree.find(".//netex:routePoints", namespace)
     for routePoint in routePointsTree.findall(".//netex:RoutePoint", namespace):
@@ -28,6 +32,7 @@ def get_data_from_path(path):
         pointsInSequence = route.find(".//netex:pointsInSequence", namespace)
         routeObj = { "id": id, "lineRef": lineRef, "directionRef": directionRef, "pointsInSequence": [] }
         for pointInSequence in pointsInSequence.findall(".//netex:PointOnRoute", namespace):
+            order = pointInSequence.attrib['order']
             routePoint = "RoutePoint", pointInSequence.attrib['id']
             routePointRef = "RoutePointRef", pointInSequence.find(".//netex:RoutePointRef", namespace).attrib['ref']
             routePointOnOrderRef = {"routePoint": routePoint, "routePointRef": routePointRef}
@@ -86,5 +91,5 @@ def get_data_from_path(path):
 
     return bus_data
 
-bus_data = get_data_from_path("NX-PI-01_DK_NAP_LINE_MOVIA-MOVIA-350S_20240212.xml")
+bus_data = get_data_from_path("Data/MOVIA_MOVIA/NX-PI-01_DK_NAP_LINE_MOVIA-MOVIA-300S_20240212.xml")
 print(bus_data)
