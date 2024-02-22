@@ -8,7 +8,11 @@ def get_data_from_path(path):
     bus_data = { "routePoints": [], "routes": [], "destinationDisplays": [], "scheduledStopPoints": [], "serviceLinks": [], "lines": [] }
 
     data = {
-        "line_name": "",
+        "line": {
+            "name": "",
+            "shortName": "",
+        },
+        "routes": []
     }
 
     dataObjectsTree = root.find(".//netex:dataObjects", namespace)
@@ -88,8 +92,12 @@ def get_data_from_path(path):
         bus_data["lines"].append(lineObj)
         print("lineObj", lineObj)
         print()
+        data["line"]["name"] = name
+        data["line"]["shortName"] = line.find(".//netex:ShortName", namespace).text
 
-    return bus_data
+    return bus_data, data
 
-bus_data = get_data_from_path("Data/MOVIA_MOVIA/NX-PI-01_DK_NAP_LINE_MOVIA-MOVIA-300S_20240212.xml")
+bus_data, data = get_data_from_path("Data/MOVIA_MOVIA/NX-PI-01_DK_NAP_LINE_MOVIA-MOVIA-300S_20240212.xml")
 print(bus_data)
+print()
+print(data)
