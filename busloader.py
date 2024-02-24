@@ -18,18 +18,13 @@ def get_data_from_file(file):
 	routePointsTree = dataObjectsTree.find(".//netex:routePoints", namespace)
 
 	# Check if a Location is NoneType, because some routepoints have location stored differently
-	checkLocation = routePointsTree.find(".//netex:Logitude", namespace)
-	print("Check", checkLocation)
-	if checkLocation is not None:
-		print("Method 1")
+	try:
 		routes, routePoints = method1(dataObjectsTree)
 		data["routePoints"] = routePoints
 		data["routes"] = routes
-	else:
-		print("Method 2")
-		routes, routePoints = method2(dataObjectsTree)
-		data["routePoints"] = routePoints
-		data["routes"] = routes
+		data["line"]["name"], data["line"]["shortName"] = get_line_name(dataObjectsTree)
+	except:
+		print("Error in ", file)
 
 #	routePoints = []
 #	for routePoint in routePointsTree.findall(".//netex:RoutePoint", namespace):
@@ -73,7 +68,6 @@ def get_data_from_file(file):
 #	data["routePoints"] = routePoints
 	# Get line name
 
-	data["line"]["name"], data["line"]["shortName"] = get_line_name(dataObjectsTree)
 #	linesTree = dataObjectsTree.find(".//netex:lines", namespace)
 #	for line in linesTree.findall(".//netex:Line", namespace):
 #		data["line"]["name"] = line.find(".//netex:Name", namespace).text
@@ -192,6 +186,7 @@ def get_line_name(dataObjectsTree: ET.ElementTree):
 
 data = get_data_from_file("Data/MOVIA_MOVIA/NX-PI-01_DK_NAP_LINE_MOVIA-MOVIA-350S_20240212.xml")
 print(data)
+print()
 
 data2 = get_data_from_file("Data/AEROE_AEROE/NX-PI-01_DK_NAP_LINE_AEROE-AEROE-790_20240212.xml")
 print(data2)
