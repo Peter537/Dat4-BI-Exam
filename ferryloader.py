@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 namespace = {'netex': 'http://www.netex.org.uk/netex'}
 
 def get_data_from_file(file):
+	error = None
 	tree = ET.parse(file)
 	root = tree.getroot()
 	data = {
@@ -68,9 +69,9 @@ def get_data_from_file(file):
 			data["line"]["name"] = line.find(".//netex:Name", namespace).text
 			data["line"]["shortName"] = line.find(".//netex:ShortName", namespace).text
 	except:
-		print("Error in ", file)
+		error = "Error in file: " + file
 
-	return data
+	return data, error
 
 data = get_data_from_file("Data/AErF_616/NX-PI-01_DK_NAP_LINE_AErF-616-AEroefaergerne_20240212.xml")
 print(data)

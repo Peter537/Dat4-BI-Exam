@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 namespace = {'netex': 'http://www.netex.org.uk/netex'}
 
 def get_data_from_file(file):
+	error = None
 	tree = ET.parse(file)
 	root = tree.getroot()
 	data = {
@@ -24,7 +25,7 @@ def get_data_from_file(file):
 		data["routes"] = routes
 		data["line"]["name"], data["line"]["shortName"] = get_line_name(dataObjectsTree)
 	except:
-		print("Error in ", file)
+		error = "Error in file " + file
 
 #	routePoints = []
 #	for routePoint in routePointsTree.findall(".//netex:RoutePoint", namespace):
@@ -73,7 +74,7 @@ def get_data_from_file(file):
 #		data["line"]["name"] = line.find(".//netex:Name", namespace).text
 #		data["line"]["shortName"] = line.find(".//netex:ShortName", namespace).text
 
-	return data
+	return data, error
 
 def method1(dataObjectsTree: ET.ElementTree):
 	routes = []
