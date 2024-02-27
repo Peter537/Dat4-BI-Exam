@@ -1,5 +1,5 @@
 # Data is too large to store on Github
-Data/*
+# Data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
