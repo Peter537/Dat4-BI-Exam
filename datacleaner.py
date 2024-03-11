@@ -1,7 +1,7 @@
 import pandas as pd
 import z_score
 
-def return_cleaned_data(path):
+def load_data(path):
     df = pd.read_csv(path)
 
     print("--- Check for missing values ---")
