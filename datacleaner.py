@@ -37,4 +37,4 @@ def load_data(path):
 
     return df, dfNumeric, dfNoOutliers
 
-df, dfNumeric, dfNoOutliers = return_cleaned_data('data/data_science_salaries.csv')
+df, dfNumeric, dfNoOutliers = load_data('data/data_science_salaries.csv')
