@@ -14,7 +14,8 @@ st.set_page_config(
 st.title('Data Processing')
 
 data_path = "./data/data_science_salaries.csv"
-df, dfNumeric, dfNoOutliers = datacleaner.load_data(data_path)
+df = datacleaner.load_data(data_path)
+dfNoOutliers = datacleaner.get_no_outliers_df(df)
 
 min_work_year = df['work_year'].min()
 max_work_year = df['work_year'].max()
@@ -60,17 +61,3 @@ avg_salary_per_job = df.groupby('job_title')['salary_in_usd'].mean().reset_index
 fig = px.bar(avg_salary_per_job, x='job_title', y='salary_in_usd', title='Average Salary by Job Title', labels={'job_title': 'Job Title', 'salary_in_usd': 'Average Salary'})
 fig.update_xaxes(tickangle=45)
 st.plotly_chart(fig)
-
-job_titles = df['job_title'].unique()
-
-# Create a TfidfVectorizer to convert job titles into numerical features
-vectorizer = TfidfVectorizer(stop_words='english')
-X = vectorizer.fit_transform(job_titles)
-
-# Calculate distortions (inertia) for different values of k
-distortions = []
-K_range = range(1, 11)
-for k in K_range:
-    kmeans = KMeans(n_clusters=k, random_state=42)
-    kmeans.fit(X)
-    distortions.append(kmeans.inertia_)
