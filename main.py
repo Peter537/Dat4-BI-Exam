@@ -1,6 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
+import datacleaner
+
 import json
 import requests
 import pandas as pd
@@ -35,3 +37,5 @@ banner = """
 
 st.markdown(banner, unsafe_allow_html=True)
 
+data_path = "./data/data_science_salaries.csv"
+df, dfNumeric, dfNoOutliers = datacleaner.load_data(data_path)
