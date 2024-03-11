@@ -4,6 +4,8 @@
 
 https://www.kaggle.com/datasets/sazidthe1/data-science-salaries
 
+https://www.kaggle.com/datasets/yusufglcan/country-data
+
 Business Model: Global Career Advisors (måske skift senere)
 
 Mission:
