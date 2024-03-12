@@ -4,6 +4,7 @@ from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 import glob
+import datacleaner 
 
 st.set_page_config(
     page_title="Prediction With ML",
@@ -12,11 +13,17 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
+
+
+
 st.write("")
 regression = None
 classification = None
 kmeans = None
 dfCluster = st.session_state['dfNumeric'].drop(['gdp_per_capita'], axis=1)
+
+df = datacleaner.load_data("./data/data_science_salaries.csv")
 
 try:
     if glob.glob("regression.pkl"):
@@ -65,11 +72,55 @@ with tab2:
         dfCluster = dfCluster.sample(frac=1).reset_index(drop=True)
         st.write("Data has been randomized")
     template = dfCluster.iloc[:1].copy()
-    prediction = st.data_editor(template, key="dfCluster")
+
+
+   
+   # Dropdown for Job Title
+    job_title_input = st.selectbox("Job Title", df['job_title'].unique())
+
+    # Dropdown for Experience Level
+    experience_level_input = st.selectbox("Experience Level", df['experience_level'].unique())
+
+    # Dropdown for Company Location
+    company_location_input = st.selectbox("Company Location", df['company_location'].unique())
+
+    # Dropdown for Work Model
+    work_model_input = st.selectbox("Work Model", df['work_models'].unique())
+    # Dropdown for Work Year
+    work_year_input = st.selectbox("Work Year", df['work_year'].unique())
+   
+
+
+    def createNewRow(job_title, experience_level, company_location, work_model, work_year):
+        inputs = {}
+        values = [job_title, experience_level, company_location, work_model, work_year]
+
+        prefixes = ['job_title_', 'experience_level_', 'company_location_', 'work_models_', 'work_year_']
+        
+        # Iterate through prefixes and input values to create the input dictionary
+        for prefix, value in zip(prefixes, values):
+            column_name = f"{prefix}{value}"
+            if column_name in dfCluster.columns:
+                inputs[column_name] = 1
+                # Set all other columns with the same prefix to 0
+                for col in dfCluster.columns:
+                    if col.startswith(prefix) and col != column_name:
+                        inputs[col] = 0
+
+        # Convert the dictionary to a Series and then to a DataFrame
+        input_row = pd.Series(inputs)
+        input_row = pd.DataFrame([input_row])
+
+        # Ensure the input_row has the same columns as dfCluster
+        input_row = input_row.reindex(columns=dfCluster.columns, fill_value=0)
+
+        return input_row
+
 
     X = dfCluster.copy()
 
     if (st.button("Predict cluster")):
+        prediction = createNewRow(job_title_input, experience_level_input, company_location_input, work_model_input, work_year_input)
         st.write("The predicted cluster for the selected data is: " + kmeans.predict(prediction).__str__())
 
     st.title("KMeans Clustering Analysis")
@@ -87,3 +138,7 @@ with tab3:
 
 with tab4:
     st.write("About")
+    
+
+    
+
