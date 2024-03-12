@@ -12,7 +12,7 @@ from io import StringIO
 import langdetect
 from langdetect import DetectorFactory, detect, detect_langs
 from PIL import Image
-from datacleaner import load_data, load_country_gdp_data, combined_df
+from datacleaner import load_data, load_country_gdp_data, combined_df, get_numeric_df
 
 st.set_page_config(
     page_title="BI Exam Project",
@@ -41,3 +41,4 @@ st.markdown(banner, unsafe_allow_html=True)
 st.session_state['df'] = load_data('data/data_science_salaries.csv')
 st.session_state['dfGDP'] = load_country_gdp_data("data/country_gdp_data.csv")
 st.session_state['dfCombined'] = combined_df()
+st.session_state['dfNumeric'] = get_numeric_df(st.session_state['dfCombined'])
