@@ -44,6 +44,9 @@ with tab2:
 with tab3:
     st.title("Clustering")
 
+    if st.button("Fix NS_ERROR_FAILURE"):
+        dfCluster = dfCluster.sample(frac=1).reset_index(drop=True)
+        st.write("Data has been randomized")
     template = dfCluster.iloc[:1].copy()
     prediction = st.data_editor(template, key="dfCluster")
 
