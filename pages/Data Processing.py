@@ -1,8 +1,6 @@
 import streamlit as st
 import datacleaner
 import plotly.express as px
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
 
 st.set_page_config(
     page_title="Data Processing",
@@ -13,9 +11,7 @@ st.set_page_config(
 
 st.title('Data Processing')
 
-data_path = "./data/data_science_salaries.csv"
-df = datacleaner.load_data(data_path)
-dfNoOutliers = datacleaner.get_no_outliers_df(df)
+df = datacleaner.combined_df()
 
 min_work_year = df['work_year'].min()
 max_work_year = df['work_year'].max()
@@ -31,7 +27,7 @@ st.write(df.describe())
 fig = px.histogram(df['salary_in_usd'], x='salary_in_usd', nbins=50, title='Salary in USD')
 st.plotly_chart(fig)
 
-fig = px.histogram(dfNoOutliers, x='salary_in_usd', color='company_location',
+fig = px.histogram(df, x='salary_in_usd', color='company_location',
                         title='Salary Distribution by Country',
                         labels={'salary_in_usd': 'Salary in USD', 'company_location': 'Country'},
                         template='plotly_white')
