@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_option('deprecation.showPyplotGlobalUse', False)
 from streamlit_option_menu import option_menu
 
 import datacleaner
