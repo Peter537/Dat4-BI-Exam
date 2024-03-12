@@ -1,5 +1,6 @@
 import streamlit as st
 from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
 import pickle
 import glob
 
@@ -17,6 +18,13 @@ kmeans = None
 dfCluster = st.session_state['dfNumeric'].drop(['gdp_per_capita'], axis=1)
 
 try:
+    if glob.glob("regression.pkl"):
+        regression = pickle.load(open("regression.pkl", "rb"))
+        pass
+    else:
+        # Add regression here
+        pass
+
     if glob.glob("cluster.pkl"):
         kmeans = pickle.load(open("cluster.pkl", "rb"))
     else:
@@ -28,23 +36,24 @@ try:
 
         pickle.dump(kmeans, open("cluster.pkl", "wb"))
 
-except Exception as e:
-    st.write("An error occurred: ", e)
+    if glob.glob("classification.pkl"):
+        classification = pickle.load(open("classification.pkl", "rb"))
+    else:
+        pass
 
-tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Classification", "Clustering", "About"])
+except Exception as e:
+    st.write("An error occurred while loading models: ", e)
+
+tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", "About"])
 
 with tab1:
     df = st.session_state["df"]
     st.write("Regression")
 
 with tab2:
-    df = st.session_state["df"]
-    st.write("Classification")
-
-with tab3:
     st.title("Clustering")
 
-    if st.button("Fix NS_ERROR_FAILURE"):
+    if st.button("Fix NS_ERROR_FAILURE or a white box below"): # This is a workaround for a bug in Streamlit. I can't figure out why the error appears, but reloading the data fixes it
         dfCluster = dfCluster.sample(frac=1).reset_index(drop=True)
         st.write("Data has been randomized")
     template = dfCluster.iloc[:1].copy()
@@ -63,6 +72,10 @@ with tab3:
     fig = visualizer._fig
     st.pyplot(fig)
     st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
+
+with tab3:
+    df = st.session_state["df"]
+    st.write("Classification")
 
 with tab4:
     st.write("About")
