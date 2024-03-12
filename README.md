@@ -29,8 +29,25 @@ Tasks:
 
 ## Questions
 
-1. As an Employee, how much more can I expect to earn in different jobs with experience level?
-2. As a Student with Entry-level experience, which jobs have the highest average salary?
-3. Does GDP per capita of the Country have an effect on salary?
-4. As a Student, I want to know the most amount of jobs in my country.
-5. As an Employee, I want to know how much I should earn.
+1. As an Employee, looking at the data, which factors factors affect my salary?
+
+// how much more can I expect to earn based on experience level, work model, job title, country?
+
+DataProcessing
+
+2. Does GDP per capita of the Country have an effect on salary?
+
+DataProcessing
+
+Lav GDP = Større chance for du får en lav løn
+Højere GDP = Større chance for du får en højere løn, men stadig mange som får en mindre løn, mange faktorer spiller ind pga. forskelllige jobs, erfaring etc.
+Højest GDP = Vi har ikke nok data punkter til at kunne sige meget om det.
+
+3. As an Employee, I want to know how much I should earn.
+
+Regression
+
+4. What parameters affect the salary the most?
+
+Clustering
+Classification - Decision Tree
