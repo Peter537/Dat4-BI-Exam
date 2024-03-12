@@ -15,6 +15,9 @@ Marketing Stragety:
 We provide a global workspace intelligence, finding the most appropriate build for an effective job with an effective income.
 We will in this data figure out what type of workmode is better (eg. remote, on-site og hybrid) as well as what sort of jobs have done best over the years.
 
+Hypothesis:
+We believe that the salary is affected by the job type and the experience level and the location of the job because of GDP per capita.
+
 Tasks:
 
 [] Create different questions for what to research: Ex. as education institute I want to know what jobs are available in my country. Ex. as employee I want to know how much I should earn
@@ -28,8 +31,6 @@ Tasks:
 
 1. As an Employee, how much more can I expect to earn in different jobs with experience level?
 2. As a Student with Entry-level experience, which jobs have the highest average salary?
-3. How does location affect salary?
-
-4. Does GDP per capita have an effect on salary?
-5. As a Student, I want to know the most amount of jobs in my country.
-6. As an Employee, I want to know how much I should earn.
+3. Does GDP per capita of the Country have an effect on salary?
+4. As a Student, I want to know the most amount of jobs in my country.
+5. As an Employee, I want to know how much I should earn.
