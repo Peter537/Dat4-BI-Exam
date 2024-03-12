@@ -123,7 +123,15 @@ def combined_df():
     print(combined_df.shape)
     print(combined_df.sample(5))
 
-    return get_no_outliers_df(combined_df)
+    df = get_no_outliers_df(combined_df)
+
+    print(df.info())
+
+    df = df.dropna()
+
+    print(df.info())
+
+    return df
 
 def get_numeric_df(df):
     # Create a Numeric DataFrame
