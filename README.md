@@ -29,6 +29,7 @@ Tasks:
 1. As an Employee, how much more can I expect to earn in different jobs with experience level?
 2. As a Student with Entry-level experience, which jobs have the highest average salary?
 3. How does location affect salary?
+
 4. Does GDP per capita have an effect on salary?
 5. As a Student, I want to know the most amount of jobs in my country.
 6. As an Employee, I want to know how much I should earn.
