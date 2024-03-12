@@ -154,4 +154,4 @@ def get_numeric_df(df):
 #print(df["company_location"].unique())
 
 df = combined_df()
-print(df.sample(7))
+#print(df.sample(7))
