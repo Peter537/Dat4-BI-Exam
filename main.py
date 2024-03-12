@@ -2,8 +2,6 @@ import streamlit as st
 st.set_option('deprecation.showPyplotGlobalUse', False)
 from streamlit_option_menu import option_menu
 
-import datacleaner
-
 import json
 import requests
 import pandas as pd
@@ -13,7 +11,6 @@ from io import StringIO
 import langdetect
 from langdetect import DetectorFactory, detect, detect_langs
 from PIL import Image
-from datacleaner import load_data, load_country_gdp_data, combined_df, get_numeric_df
 import glob
 
 st.set_page_config(
@@ -41,11 +38,13 @@ banner = """
 st.markdown(banner, unsafe_allow_html=True)
 
 try:
-    if glob.glob("data/data_science_salaries.csv"):
+    from datacleaner import load_data, load_country_gdp_data, combined_df, get_numeric_df
+    
+    if glob.glob("data/data_science_salaries.*"):
         st.session_state['df'] = load_data('data/data_science_salaries.csv')
     else:
         raise FileNotFoundError("File not found")
-    if glob.glob("data/country_gdp_data.csv"):
+    if glob.glob("data/country_gdp_data.*"):
         st.session_state['dfGDP'] = load_country_gdp_data("data/country_gdp_data.csv")
     else:
         raise FileNotFoundError("File not found")
