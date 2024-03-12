@@ -37,7 +37,7 @@ def column_picker(df):
     z = st.selectbox('**Select extra measure, Z**', df.columns)     
     return x, y, z
 
-df = datacleaner.combined_df()
+df = st.session_state["dfCombined"]
 st.title('Data Exploration')
 
 x, y, z = column_picker(df)
