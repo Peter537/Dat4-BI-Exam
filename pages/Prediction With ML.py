@@ -7,7 +7,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-
+df = st.session_state['df'].copy()
+df = df.iloc[:1]
+st.data_editor(df)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Classification", "Clustering", "About"])
 
