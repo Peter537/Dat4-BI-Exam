@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
 import pickle
@@ -28,17 +29,24 @@ try:
     if glob.glob("cluster.pkl"):
         kmeans = pickle.load(open("cluster.pkl", "rb"))
     else:
-        kmeansX = dfCluster.copy()
+        X = dfCluster.copy()
 
         num_clusters = 9 # Higher number of clusters for more detailed analysis. Lower number of clusters for more general analysis. Should be 3 for more general analysis.
         kmeans = KMeans(init='k-means++', n_clusters=num_clusters, n_init=10, random_state=42)
-        kmeans.fit(kmeansX)
+        kmeans.fit(X)
+        y = kmeans.predict(X)
+        rowCluster = pd.DataFrame(y, columns=['cluster'])
 
+        rowCluster.to_csv("data/cluster.csv", index=False)
         pickle.dump(kmeans, open("cluster.pkl", "wb"))
 
     if glob.glob("classification.pkl"):
         classification = pickle.load(open("classification.pkl", "rb"))
     else:
+        rowCluster = pd.read_csv("data/cluster.csv")
+        df = st.session_state['dfNumeric'].copy()
+        df['cluster'] = rowCluster['cluster']
+        st.write(df)
         pass
 
 except Exception as e:
