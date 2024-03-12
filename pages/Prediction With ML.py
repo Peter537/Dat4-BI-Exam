@@ -1,7 +1,10 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, root_mean_squared_error
 import pickle
 import glob
 import datacleaner 
@@ -22,10 +25,13 @@ regression = None
 classification = None
 kmeans = None
 dfCluster = st.session_state['dfNumeric'].drop(['gdp_per_capita'], axis=1)
+dfClassification = st.session_state['dfNumeric'].copy()
 
 df = datacleaner.load_data("./data/data_science_salaries.csv")
 
 try:
+    st.warning("If this is the first time you are running this app, it may take a while to load the models as they will be trained. Please be patient.")
+
     if glob.glob("regression.pkl"):
         regression = pickle.load(open("regression.pkl", "rb"))
         pass
@@ -33,7 +39,7 @@ try:
         # Add regression here
         pass
 
-    if glob.glob("cluster.pkl"):
+    if glob.glob("cluster.pkl") and glob.glob("data/cluster.csv"):
         kmeans = pickle.load(open("cluster.pkl", "rb"))
     else:
         X = dfCluster.copy()
@@ -51,10 +57,21 @@ try:
         classification = pickle.load(open("classification.pkl", "rb"))
     else:
         rowCluster = pd.read_csv("data/cluster.csv")
-        df = st.session_state['dfNumeric'].copy()
-        df['cluster'] = rowCluster['cluster']
-        st.write(df)
-        pass
+        dfClassification['cluster'] = rowCluster['cluster']
+
+        X = dfClassification.drop(['salary_in_usd'], axis=1)
+        y = dfClassification['salary_in_usd']
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=88)
+
+        classification = DecisionTreeClassifier(random_state=10)
+        classification.fit(X_train, y_train)
+
+        print("Accuracy: ", classification.score(X_test, y_test))
+        print("RMSE:", root_mean_squared_error(y_test, classification.predict(X_test)))
+        print("Classes: ", classification.classes_)
+
+        pickle.dump(classification, open("classification.pkl", "wb"))
 
 except Exception as e:
     st.write("An error occurred while loading models: ", e)
