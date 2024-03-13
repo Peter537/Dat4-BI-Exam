@@ -103,14 +103,6 @@ tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", 
 with tab1:
     df = st.session_state["df"]
     st.title("Regression")
-    #MSE telling us that a considerable amount of units discreptancy between predicted and actual values
-    st.write(f'Mean Squared Error (MSE): {mse:.2f}')
-    #RMSE telling us that the salary deviates around 62900 USD from the actual values
-    st.write(f'Root Mean Squared Error (RMSE): {rmse:.2f}')
-    #R2 is basically our accuracy score.
-    st.write(f'R-squared (R2): {r2}')
-
-    st.title("Regression Analysis")
     # Dropdown for Job Title
     job_title_input = st.selectbox("Job Titles", df['job_title'].unique() )
     # Dropdown for Experience Level
@@ -125,6 +117,21 @@ with tab1:
         predicted_salary = rf_regressor.predict(new_data_point)[0]
 
         st.write(f'Predicted Salary: {predicted_salary} USD')
+
+    st.title("Regression Analysis")
+    
+    st.write("We use a Regression model to predict the salary, because we need to predict the relationship between independent variables and dependent variables. The independent variables are the job title, experience level and company location, and the dependent variable is the salary in USD.")
+    st.write("This will allow the user to input the job title, experience level and company location, and the model will predict what they could expect to earn in USD.")
+    st.write("\n")
+
+    st.write(f"The Mean Squared Error (MSE) measures the average squared difference between our model's predictions and the actual salary values. Our MSE measurement is {mse:.2f}.")
+    st.write("\n")
+
+    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is {rmse:.2f}.")
+    st.write(f"Since our data is between {y.min()} and {y.max()}, it isn't the best model, because it could be significantly off.")
+    st.write("\n")
+
+    st.write(f"R-squared (R2) is a measurement that shows how much of the variance in the dependent variable our model explains. Our R2 score is {r2}%. This means that our model explains {r2}% of the variance in the dependent variable.")
 
 with tab2:
     st.title("Clustering")
