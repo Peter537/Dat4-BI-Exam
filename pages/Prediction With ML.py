@@ -84,11 +84,11 @@ try:
 except Exception as e:
     st.write("An error occurred while loading models: ", e)
 
-tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", "About"])
+tab1, tab2, tab3, tab4 = st.tabs(["About", "Regression", "Clustering", "Classification"])
 
 # ------------------- Regression -------------------
 
-with tab1:
+with tab2:
     df = st.session_state["df"]
     st.title("Random Forest Regressor")
     # Dropdown for Job Title
@@ -118,7 +118,7 @@ with tab1:
 
 # ------------------- Clustering -------------------
 
-with tab2:
+with tab3:
     st.title("Clustering")
 
    # Dropdown for Job Title
@@ -249,7 +249,7 @@ with tab2:
 
 # ------------------- Classification -------------------
 
-with tab3:
+with tab4:
     df['cluster'] = rowCluster['cluster']
     st.write("Classification")
 
@@ -319,7 +319,7 @@ with tab3:
 
     st.title("Classification Analysis")
 
-with tab4:
+with tab1:
     st.title("About")
     
     st.write("Each tab contains a model that has already been trained and is ready to be used. Following the 'prediction' part, there is a section explaining what model is used and how accurate it is.")
