@@ -212,6 +212,8 @@ with tab2:
 
     st.title("KMeans Clustering Analysis")
 
+    st.write("K-Means was chosen because it is a simple and efficient algorithm. It is also easy to interpret the results. The algorithm works by dividing the data into clusters, where each cluster has its own centroid. Since this dataset is not very large, Hierarchical Clustering could also have been used, but being able to manually set the number of clusters is a big advantage of KMeans, and one that is needed for the purpose of this cluster, as explained later.")
+
     st.write("For this analysis, we used KMeans clustering to group the data into 9 clusters. The silhouette score of the model is 0.53, which is considered to be a good score.")
     st.write("The silhouette score is a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation). The silhouette ranges from -1 to 1, where a high value indicates that the object is well matched to its own cluster and poorly matched to neighboring clusters. \n\n If most objects have a high value, then the clustering configuration is appropriate. If many points have a low or negative value, then the clustering configuration may have too many or too few clusters. In the case of a negative score, a point is placed in the wrong cluster compared to where it was expected")
     
