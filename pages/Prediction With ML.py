@@ -86,6 +86,8 @@ except Exception as e:
 
 tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", "About"])
 
+# ------------------- Regression -------------------
+
 with tab1:
     df = st.session_state["df"]
     st.title("Random Forrest Regressor")
@@ -113,6 +115,8 @@ with tab1:
     st.write("\n")
 
     st.write(f"R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is 41.28%, this means that our model can explain 41.28% of the variance in the dependent variable.")
+
+# ------------------- Clustering -------------------
 
 with tab2:
     st.title("Clustering")
