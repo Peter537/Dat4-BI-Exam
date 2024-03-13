@@ -4,11 +4,12 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score, silhouette_score
 import pickle
 import glob
 from sklearn.ensemble import RandomForestRegressor
 import newRowGenerator as ng
+import matplotlib.pyplot as plt
 
 st.set_page_config(
     page_title="Prediction With ML",
@@ -156,8 +157,6 @@ with tab2:
 
     # Dropdown for Company Size
     company_size_input = st.selectbox("Company Size", df['company_size'].unique())
-   
-
 
     def createNewRow(job_title, experience_level, company_location, work_model, work_year, salaryUSD, employment_type, company_size):
 
@@ -206,12 +205,53 @@ with tab2:
 
     st.title("KMeans Clustering Analysis")
 
+    st.write("For this analysis, we used KMeans clustering to group the data into 9 clusters. The silhouette score of the model is 0.53, which is considered to be a good score.")
+    st.write("The silhouette score is a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation). The silhouette ranges from -1 to 1, where a high value indicates that the object is well matched to its own cluster and poorly matched to neighboring clusters. \n\n If most objects have a high value, then the clustering configuration is appropriate. If many points have a low or negative value, then the clustering configuration may have too many or too few clusters. In the case of a negative score, a point is placed in the wrong cluster compared to where it was expected")
+    
+    st.write("The silhouette score of the model can be visualised as follows:")
+
     from yellowbrick.cluster import SilhouetteVisualizer
     visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
     visualizer.fit(X)
     fig = visualizer._fig
     st.pyplot(fig)
     st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
+
+    st.write("For this cluster, a few possible sizes were considered as seen below in the silhouette score and elbow graph:")
+
+    row = st.columns([1, 1])
+    with row[0]:
+        scores = []
+        for k in range(2, 10):
+            model = KMeans(init='k-means++', n_clusters=k, n_init=10, random_state=42).fit(X)
+            model.fit(X)
+            score = silhouette_score(X, model.labels_, metric='euclidean', sample_size=len(X))
+            scores.append(score)
+
+        plot = plt.figure()
+        plt.plot(range(2,10), scores, 'bx-')
+        plt.xlabel('K')
+        plt.ylabel('Silhouette Score')
+        st.pyplot(plot)
+
+    with row[1]:
+        distortions = []
+        K = range(2,10)
+        for k in K:
+            model = KMeans(n_clusters=k, n_init=10).fit(X)
+            model.fit(X)
+            distortions.append(model.inertia_)
+        
+        plot2 = plt.figure()
+        plt.title('Elbow Method for Optimal K')
+        plt.plot(K, distortions, 'bx-')
+        plt.xlabel('K')
+        plt.ylabel('Distortion')
+        st.pyplot(plot2)
+    
+    st.write("From the above graphs, we can see that the optimal number of clusters is 3. This is because the silhouette score is highest at 3 and the elbow graph shows an inflection point at 3.")
+    st.write("Despite this, the number of clusters chosen was 9 to allow for more detailed analysis. The silhouette score of 0.53 is still considered to be a good score, and the lose is minimal.")
+    st.write("Having a good describability of the clusters is very important, as the result is used for the classification model. The classification model is used to predict the salary of a new data point based on the cluster it belongs to. The more detailed the clusters are, the more accurate the classification model will be.")
 
 # ------------------- Classification -------------------
 
