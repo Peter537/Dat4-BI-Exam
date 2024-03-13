@@ -4,9 +4,6 @@ import pandas as pd
 # A custom library for calculating z-scores and identifying outlier
 # calculate expects a panda dataframe
 
-# TODO: Ændre det her så det bliver til calculateFrame og calculateList så den kan bruges til enkle dele i stedet for det hele...
-# Eller overvej at returnere outliers i et frame så det kan ses hvad der er hvor...
-
 outliers = []
 
 def calculateList(data, threshold=3.0, drop=False):
