@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score, silhouette_score
+from sklearn.metrics import root_mean_squared_error, r2_score, silhouette_score
 import pickle
 import glob
 from sklearn.ensemble import RandomForestRegressor
@@ -43,19 +42,7 @@ try:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=83)
 
         rf_regressor = RandomForestRegressor(n_estimators=50, random_state=116)
-
         rf_regressor.fit(X_train, y_train)
-
-        y_pred = rf_regressor.predict(X_test)
-
-        mse = mean_squared_error(y_test, y_pred)
-
-        rmse = np.sqrt(mse)
-
-        r2 = r2_score(y_test, y_pred)
-        r2 = r2*100
-        r2 = round(r2, 2)
-
         pass
 
     if glob.glob("cluster.pkl") and glob.glob("data/cluster.csv"):
@@ -101,7 +88,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", 
 
 with tab1:
     df = st.session_state["df"]
-    st.title("Regression")
+    st.title("Random Forrest Regressor")
     # Dropdown for Job Title
     job_title_input = st.selectbox("Job Titles", df['job_title'].unique() )
     # Dropdown for Experience Level
@@ -117,20 +104,21 @@ with tab1:
 
         st.write(f'Predicted Salary: {predicted_salary} USD')
 
-    st.title("Regression Analysis")
-    
+    y_pred = rf_regressor.predict(X_test)
+    rmse = root_mean_squared_error(y_test, y_pred)
+    r2 = round(r2_score(y_test, y_pred) * 100, 2)
+
+    st.title("Random Forest Regressor Analysis")
     st.write("We use a Regression model to predict the salary, because we need to predict the relationship between independent variables and dependent variables. The independent variables are the job title, experience level and company location, and the dependent variable is the salary in USD.")
     st.write("This will allow the user to input the job title, experience level and company location, and the model will predict what they could expect to earn in USD.")
+    st.write("We use Random Forest Regressor instead of other Regressors, because it is a very powerful and accurate algorithm. It works by training many decisiong trees, which means we will get a better prediction using this model than other comparable models.")
     st.write("\n")
 
-    st.write(f"The Mean Squared Error (MSE) measures the average squared difference between our model's predictions and the actual salary values. Our MSE measurement is {mse:.2f}.")
+    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is {rmse:.2f} USD.")
+    st.write(f"Since our salary data is between {y.min()} USD and {y.max()} USD, it isn't the best model, because it could be significantly off.")
     st.write("\n")
 
-    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is {rmse:.2f}.")
-    st.write(f"Since our data is between {y.min()} and {y.max()}, it isn't the best model, because it could be significantly off.")
-    st.write("\n")
-
-    st.write(f"R-squared (R2) is a measurement that shows how much of the variance in the dependent variable our model explains. Our R2 score is {r2}%. This means that our model explains {r2}% of the variance in the dependent variable.")
+    st.write(f"R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is {r2}%, this means that our model can explain {r2}% of the variance in the dependent variable.")
 
 with tab2:
     st.title("Clustering")
