@@ -28,7 +28,7 @@ Tasks:
 [x] Check language consistency
 [x] Clean up project
 [x] Write in the about tab
-[] Save Regressor as pkl
+[x] Save Regressor as pkl
 
 ## Questions
 
