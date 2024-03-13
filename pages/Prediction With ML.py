@@ -80,6 +80,8 @@ with tab1:
     df = st.session_state["df"]
     st.write("Regression")
 
+    st.title("Regression Analysis")
+
 with tab2:
     st.title("Clustering")
 
