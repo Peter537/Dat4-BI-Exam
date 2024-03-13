@@ -20,9 +20,7 @@ We believe that the salary is affected by the job type and the experience level 
 
 Tasks:
 
-[] Use new data to regress
 [] Implement Classification in Streamlit
-[] Implement Regression in Streamlit
 [] Write DataProcessing theory
 [] Write Cluster theory
 [] Write Classification theory
