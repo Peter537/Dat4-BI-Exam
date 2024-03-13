@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
@@ -9,13 +10,13 @@ import glob
 from sklearn.ensemble import RandomForestRegressor
 import newRowGenerator as ng
 import matplotlib.pyplot as plt
-
 st.set_page_config(
     page_title="Prediction With ML",
     page_icon="🧊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
 
 
 df = st.session_state['df']
@@ -26,7 +27,9 @@ classification = None
 kmeans = None
 dfCluster = st.session_state['dfNumeric'].drop(['gdp_per_capita'], axis=1)
 dfClassification = st.session_state['dfNumeric'].copy()
+# To remove the columns that are not needed for the classification model
 dfNum = st.session_state['dfNumeric'].copy()
+dfCombined = st.session_state['dfCombined']
 
 try:
     st.warning("If this is the first time you are running this app, it may take a while to load the models as they will be trained. Please be patient.")
@@ -91,6 +94,8 @@ tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", 
 with tab1:
     df = st.session_state["df"]
     st.title("Random Forrest Regressor")
+
+    
     # Dropdown for Job Title
     job_title_input = st.selectbox("Job Titles", df['job_title'].unique() )
     # Dropdown for Experience Level
@@ -144,7 +149,7 @@ with tab2:
 
     # Dropdown for Company Size
     company_size_input = st.selectbox("Company Size", df['company_size'].unique())
-
+    
     def createNewRow(job_title, experience_level, company_location, work_model, work_year, salaryUSD, employment_type, company_size):
 
         inputs = {}
@@ -252,37 +257,41 @@ with tab3:
     st.write("Classification")
 
     # Dropdown for Job Title
-    job_title_input = st.selectbox("Job Title", df['job_title'].unique(), key='class_job_title')
+    job_title_input2 = st.selectbox("Job Title", df['job_title'].unique(), key='class_job_title')
 
     # Dropdown for Experience Level
-    experience_level_input = st.selectbox("Experience Level", df['experience_level'].unique(), key='class_experience_level') # Make the order alphabetical
+    experience_level_input2 = st.selectbox("Experience Level", df['experience_level'].unique(), key='class_experience_level') # Make the order alphabetical
 
     # Dropdown for employment type
-    employment_type_input = st.selectbox("Employment Type", df['employment_type'].unique(), key='class_employment_type')
+    employment_type_input2 = st.selectbox("Employment Type", df['employment_type'].unique(), key='class_employment_type')
 
     # Dropdown for Work Model
-    work_model_input = st.selectbox("Work Model", df['work_models'].unique(), key='class_work_models')
+    work_model_input2 = st.selectbox("Work Model", df['work_models'].unique(), key='class_work_models')
 
     # Dropdown for Company Location
-    company_location_input = st.selectbox("Company Location", df['company_location'].unique(), key='class_company_location')
+    company_location_input2 = st.selectbox("Company Location", df['company_location'].unique(), key='class_company_location')
 
     # Dropdown for Work Year
-    work_year_input = st.selectbox("Work Year", df['work_year'].unique(), key='class_work_year')
+    work_year_input2 = st.selectbox("Work Year", df['work_year'].unique(), key='class_work_year')
 
     # Dropdown for Company Size
-    company_size_input = st.selectbox("Company Size", df['company_size'].unique(), key='class_company_size')
+    company_size_input2 = st.selectbox("Company Size", df['company_size'].unique(), key='class_company_size')
 
     # Dropdown for cluster
-    cluster_input = st.selectbox("Cluster", df['cluster'].unique(), key='class_cluster')
+    cluster_input2 = st.selectbox("Cluster", df['cluster'].unique(), key='class_cluster')
 
-
-    def createNewRow(job_title, experience_level, company_location, work_model, work_year, employment_type, company_size):
+   
+    def createNewClassRow(job_title2, experience_level2, company_location2, work_model2, work_year2, employment_type2, company_size2, cluster_input2):
 
         inputs = {}
 
+        gdp = dfCombined[dfCombined['company_location'] ==  company_location2]['gdp_per_capita'][0]
+
+        st.write(gdp)
+
         # Directly assign values for columns without prefixes
-        direct_columns = ['work_year']
-        direct_values = [work_year]
+        direct_columns = ['work_year', 'cluster', 'gdp_per_capita']
+        direct_values = [work_year2, cluster_input2, gdp]
 
         for direct_column, direct_value in zip(direct_columns, direct_values):
             inputs[direct_column] = direct_value
@@ -290,7 +299,7 @@ with tab3:
         prefixes = ['job_title_', 'experience_level_', 'company_location_', 'work_models_', 'employment_type_', 'company_size_']
 
         # Iterate through prefixes and input values to create the input dictionary
-        for prefix, value in zip(prefixes, [job_title, experience_level, company_location, work_model, employment_type, company_size]):
+        for prefix, value in zip(prefixes, [job_title2, experience_level2, company_location2, work_model2, employment_type2, company_size2, cluster_input2, gdp]):
             column_name = f"{prefix}{value}"
             if column_name in dfClassification.columns:
                 inputs[column_name] = 1
@@ -311,18 +320,31 @@ with tab3:
         return input_row
 
     if (st.button("Predict salary")):
-        prediction = createNewRow(job_title_input, experience_level_input, company_location_input, work_model_input,
-                                   work_year_input, employment_type_input, company_size_input)
+        prediction = createNewClassRow(job_title_input2, experience_level_input2, company_location_input2, work_model_input2,
+                                   work_year_input2, employment_type_input2, company_size_input2, cluster_input2)
         st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
 
     st.title("Classification Analysis")
+
+    st.write("The classification model is used to predict the salary of a new data point based on the cluster it belongs to and by doing so returns a value reprsenting a possible value within the range of the cluster")
+
+    st.write("We have trained this model with salary as the dependent variable to predict based on every other column in the dataset as the independent variables. Our model has an accuracy (explained variance) of 0.053% which is very low.")
+    st.write("Although the model has a low accuracy, it still bases its prediction variance based on the  variance within the cluster the data point belongs to, therefore the model is still better than random guessing.")
+
+
+    st.write("The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is ~77.388 USD, which is arguably acceptable as our data ranges from 15.000 USD to nearly 358.000 USD.")
+
+
+
+
+    
 
 with tab4:
     st.title("About")
     
     st.write("Each tab contains a model that has already been trained and is ready to be used. Following the 'prediction' part, there is a section explaining what model is used and how accurate it is.")
     st.write("The data used for the models is a combination of two datasets: one containing salary data and the other containing information on countries. From the second dataset, the GDP per capita is used to create a new feature in the first dataset.")
-    st.write("The data can be seen below, containg both the GDP and the result of clustering:")
+    st.write("The data can be seen below, containing both the GDP and the result of clustering:")
 
     dfCombined = st.session_state['dfCombined']
     dfCombined['cluster'] = rowCluster['cluster']
