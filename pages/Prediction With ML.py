@@ -209,23 +209,24 @@ with tab2:
     st.write("For this cluster, a few possible sizes were considered as seen below in the silhouette score and elbow graph:")
 
     row = st.columns([1, 1])
+    krange = range(2, 12)
     with row[0]:
         scores = []
-        for k in range(2, 10):
+        for k in krange:
             model = KMeans(init='k-means++', n_clusters=k, n_init=10, random_state=42).fit(X)
             model.fit(X)
             score = silhouette_score(X, model.labels_, metric='euclidean', sample_size=len(X))
             scores.append(score)
 
         plot = plt.figure()
-        plt.plot(range(2,10), scores, 'bx-')
+        plt.plot(krange, scores, 'bx-')
         plt.xlabel('K')
         plt.ylabel('Silhouette Score')
         st.pyplot(plot)
 
     with row[1]:
         distortions = []
-        K = range(2,10)
+        K = krange
         for k in K:
             model = KMeans(n_clusters=k, n_init=10).fit(X)
             model.fit(X)
@@ -238,8 +239,10 @@ with tab2:
         plt.ylabel('Distortion')
         st.pyplot(plot2)
     
+    st.write("The amount of cluster numbers tested is limited to 11 as the significance of the clusters will be lost at a larger amount.")
+
     st.write("From the above graphs, we can see that the optimal number of clusters is 3. This is because the silhouette score is highest at 3 and the elbow graph shows an inflection point at 3.")
-    st.write("Despite this, the number of clusters chosen was 9 to allow for more detailed analysis.")
+    st.write("Despite this, the number of clusters chosen was 9 to allow for more detailed analysis. The loss of choosing 9 instead of 3 is minor as the difference in silhouette score is less than 0.02.")
     st.write("Having a good describability of the clusters is very important, as the result is used for the classification model. The classification model is used to predict the salary of a new data point based on the cluster it belongs to. The more detailed the clusters are, the more accurate the classification model will be.")
 
 # ------------------- Classification -------------------
