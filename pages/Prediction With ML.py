@@ -53,6 +53,8 @@ try:
 
     if glob.glob("classification.pkl"):
         classification = pickle.load(open("classification.pkl", "rb"))
+        rowCluster = pd.read_csv("data/cluster.csv")
+        dfClassification['cluster'] = rowCluster['cluster']
     else:
         rowCluster = pd.read_csv("data/cluster.csv")
         dfClassification['cluster'] = rowCluster['cluster']
@@ -79,7 +81,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", 
 with tab1:
     df = st.session_state["df"]
     st.write("Regression")
-
+    
     st.title("Regression Analysis")
 
 with tab2:
@@ -90,7 +92,6 @@ with tab2:
         st.write("Page should be fixed now...")
 
 
-   
    # Dropdown for Job Title
     job_title_input = st.selectbox("Job Title", df['job_title'].unique() )
 
@@ -171,9 +172,75 @@ with tab2:
     st.pyplot(fig)
     st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
 
+# ------------------- Classification -------------------
+
 with tab3:
-    df = st.session_state["df"]
+    df['cluster'] = rowCluster['cluster']
     st.write("Classification")
+
+    # Dropdown for Job Title
+    job_title_input = st.selectbox("Job Title", df['job_title'].unique(), key='class_job_title')
+
+    # Dropdown for Experience Level
+    experience_level_input = st.selectbox("Experience Level", df['experience_level'].unique(), key='class_experience_level') # Make the order alphabetical
+
+    # Dropdown for employment type
+    employment_type_input = st.selectbox("Employment Type", df['employment_type'].unique(), key='class_employment_type')
+
+    # Dropdown for Work Model
+    work_model_input = st.selectbox("Work Model", df['work_models'].unique(), key='class_work_models')
+
+    # Dropdown for Company Location
+    company_location_input = st.selectbox("Company Location", df['company_location'].unique(), key='class_company_location')
+
+    # Dropdown for Work Year
+    work_year_input = st.selectbox("Work Year", df['work_year'].unique(), key='class_work_year')
+
+    # Dropdown for Company Size
+    company_size_input = st.selectbox("Company Size", df['company_size'].unique(), key='class_company_size')
+
+    # Dropdown for cluster
+    cluster_input = st.selectbox("Cluster", df['cluster'].unique(), key='class_cluster')
+
+
+    def createNewRow(job_title, experience_level, company_location, work_model, work_year, employment_type, company_size):
+
+        inputs = {}
+
+        # Directly assign values for columns without prefixes
+        direct_columns = ['work_year']
+        direct_values = [work_year]
+
+        for direct_column, direct_value in zip(direct_columns, direct_values):
+            inputs[direct_column] = direct_value
+
+        prefixes = ['job_title_', 'experience_level_', 'company_location_', 'work_models_', 'employment_type_', 'company_size_']
+
+        # Iterate through prefixes and input values to create the input dictionary
+        for prefix, value in zip(prefixes, [job_title, experience_level, company_location, work_model, employment_type, company_size]):
+            column_name = f"{prefix}{value}"
+            if column_name in dfClassification.columns:
+                inputs[column_name] = 1
+                # Set all other columns with the same prefix to 0
+                for col in dfClassification.columns:
+                    if col.startswith(prefix) and col != column_name:
+                        inputs[col] = 0
+
+        # Convert the dictionary to a Series and then to a DataFrame
+        input_row = pd.Series(inputs)
+        input_row = pd.DataFrame([input_row])
+
+        # Ensure the input_row has the same columns as dfCluster
+        input_row = input_row.reindex(columns=dfClassification.columns, fill_value=0)
+
+        st.write(input_row)
+
+        return input_row
+
+    if (st.button("Predict salary")):
+        prediction = createNewRow(job_title_input, experience_level_input, company_location_input, work_model_input,
+                                   work_year_input, employment_type_input, company_size_input)
+        st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
 
     st.title("Classification Analysis")
 
