@@ -194,7 +194,7 @@ with tab2:
 
     st.write("K-Means was chosen because it is a simple and efficient algorithm. It is also easy to interpret the results. The algorithm works by dividing the data into clusters, where each cluster has its own centroid. Since this dataset is not very large, Hierarchical Clustering could also have been used, but being able to manually set the number of clusters is a big advantage of KMeans, and one that is needed for the purpose of this cluster, as explained later.")
 
-    st.write("For this analysis, we used KMeans clustering to group the data into 9 clusters. The silhouette score of the model is 0.53, which is considered to be a good score.")
+    st.write("The final result was clustering the data into 9 clusters, which gave a silhouette score of 0.53, which is considered to be a good score.")
     st.write("The silhouette score is a measure of how similar an object is to its own cluster (cohesion) compared to other clusters (separation). The silhouette ranges from -1 to 1, where a high value indicates that the object is well matched to its own cluster and poorly matched to neighboring clusters. \n\n If most objects have a high value, then the clustering configuration is appropriate. If many points have a low or negative value, then the clustering configuration may have too many or too few clusters. In the case of a negative score, a point is placed in the wrong cluster compared to where it was expected")
     
     st.write("The silhouette score of the model can be visualised as follows:")
@@ -239,7 +239,7 @@ with tab2:
         st.pyplot(plot2)
     
     st.write("From the above graphs, we can see that the optimal number of clusters is 3. This is because the silhouette score is highest at 3 and the elbow graph shows an inflection point at 3.")
-    st.write("Despite this, the number of clusters chosen was 9 to allow for more detailed analysis. The silhouette score of 0.53 is still considered to be a good score, and the lose is minimal.")
+    st.write("Despite this, the number of clusters chosen was 9 to allow for more detailed analysis.")
     st.write("Having a good describability of the clusters is very important, as the result is used for the classification model. The classification model is used to predict the salary of a new data point based on the cluster it belongs to. The more detailed the clusters are, the more accurate the classification model will be.")
 
 # ------------------- Classification -------------------
