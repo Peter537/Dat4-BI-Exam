@@ -87,7 +87,7 @@ with tab2:
 
     if st.button("Fix NS_ERROR_FAILURE or a white box below"): # This is a workaround for a bug in Streamlit. I can't figure out why the error appears, but reloading the data fixes it
         dfCluster = dfCluster.sample(frac=1).reset_index(drop=True)
-        st.write("Data has been randomized")
+        st.write("Page should be fixed now...")
 
 
    
