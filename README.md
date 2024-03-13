@@ -20,12 +20,15 @@ We believe that the salary is affected by the job type and the experience level 
 
 Tasks:
 
-[x] Create different questions for what to research: Ex. as education institute I want to know what jobs are available in my country. Ex. as employee I want to know how much I should earn
-[x] Make clustering based on questions (No PCA)
-[x] Use cluster results to create new column based on cluster results
-[] Use new columns to classify and predict (cluster number can be used as prediction point)
-[x] Fetch country data (population statistics, etc...) and formulate questions which both data can be used to answer: Ex. Does BNP have an effect on salary?
 [] Use new data to regress
+[] Implement Classification in Streamlit
+[] Implement Regression in Streamlit
+[] Write Cluster theory
+[] Write Classification theory
+[] Write Regression theory
+[] Write project description
+[] Check language consistency
+[] Clean up project
 
 ## Questions
 
