@@ -22,11 +22,11 @@ Tasks:
 
 [] Implement Classification in Streamlit
 [] Write DataProcessing theory
-[] Write Cluster theory
+[x] Write Cluster theory
 [] Write Classification theory
 [] Write Regression theory
 [] Check language consistency
-[] Clean up project
+[x] Clean up project
 
 ## Questions
 
