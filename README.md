@@ -25,7 +25,7 @@ Tasks:
 [x] Write Cluster theory
 [] Write Classification theory
 [x] Write Regression theory
-[] Check language consistency
+[x] Check language consistency
 [x] Clean up project
 
 ## Questions
