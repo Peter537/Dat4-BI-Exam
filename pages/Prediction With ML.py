@@ -90,7 +90,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Regression", "Clustering", "Classification", 
 
 with tab1:
     df = st.session_state["df"]
-    st.title("Random Forrest Regressor")
+    st.title("Random Forest Regressor")
     # Dropdown for Job Title
     job_title_input = st.selectbox("Job Titles", df['job_title'].unique() )
     # Dropdown for Experience Level
@@ -99,22 +99,22 @@ with tab1:
     company_location_input = st.selectbox("Company Locations", df['company_location'].unique())
 
     if (st.button("Predict Salary")):
-#        new_data_point = ng.create_input_row('Marketing Data Scientist', 'Senior-level', 'United States', dfNum.columns)
         new_data_point = ng.create_input_row(job_title_input, experience_level_input, company_location_input, dfNum.columns)
         predicted_salary = regression.predict(new_data_point)[0]
-        st.write(f'Predicted Salary: {predicted_salary} USD')
+        st.write(f"Predicted Salary: {predicted_salary:.2f} USD")
 
     st.title("Random Forest Regressor Analysis")
     st.write("We use a Regression model to predict the salary, because we need to predict the relationship between independent variables and dependent variables. The independent variables are the job title, experience level and company location, and the dependent variable is the salary in USD.")
     st.write("This will allow the user to input the job title, experience level and company location, and the model will predict what they could expect to earn in USD.")
-    st.write("We use Random Forest Regressor instead of other Regressors, because it is a very powerful and accurate algorithm. It works by training many decisiong trees, which means we will get a better prediction using this model than other comparable models.")
+    st.write("We use Random Forest Regressor instead of other Regressors, because it is a very powerful and accurate algorithm. It works by training many decision tree regressors, which means we will get a better prediction using this model than other comparable models.")
     st.write("\n")
 
-    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is 48344.79 USD.")
-    st.write(f"Since our salary data is between 15.000 USD and 357.900 USD, it isn't the best model, because it could be significantly off.")
+    st.write("The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is 48.344,79 USD.")
+    st.write("Since our salary data is between 15.000 USD and 357.900 USD with a mean value of 142.835 USD, it isn't the best model, because it could be significantly off.")
     st.write("\n")
 
-    st.write(f"R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is 41.28%, this means that our model can explain 41.28% of the variance in the dependent variable.")
+    st.write("R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is 41,28%, this means that our model can explain 41.28% of the variance in the dependent variable.")
+    st.write("This means that our accuracy score i 41,28%, so in the case where it's wrong, it could be wrong withing our RMSE range.")
 
 # ------------------- Clustering -------------------
 
