@@ -2,15 +2,6 @@ import streamlit as st
 st.set_option('deprecation.showPyplotGlobalUse', False)
 from streamlit_option_menu import option_menu
 
-import json
-import requests
-import pandas as pd
-import numpy as np
-
-from io import StringIO
-import langdetect
-from langdetect import DetectorFactory, detect, detect_langs
-from PIL import Image
 import glob
 
 st.set_page_config(

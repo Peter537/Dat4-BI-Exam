@@ -1,5 +1,4 @@
 import streamlit as st
-import datacleaner
 import plotly.express as px
 
 st.set_page_config(

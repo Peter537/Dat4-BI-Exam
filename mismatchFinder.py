@@ -1,4 +1,3 @@
-import pandas as pd
 from fuzzywuzzy import process
 
 def find_and_correct_mismatches(world_names, df, threshhold):
