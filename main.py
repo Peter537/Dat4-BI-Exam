@@ -2,8 +2,6 @@ import streamlit as st
 st.set_option('deprecation.showPyplotGlobalUse', False)
 from streamlit_option_menu import option_menu
 
-import datacleaner
-
 import json
 import requests
 import pandas as pd
@@ -13,7 +11,7 @@ from io import StringIO
 import langdetect
 from langdetect import DetectorFactory, detect, detect_langs
 from PIL import Image
-from datacleaner import load_data, load_country_gdp_data, combined_df, get_numeric_df
+import glob
 
 st.set_page_config(
     page_title="BI Exam Project",
@@ -39,7 +37,19 @@ banner = """
 
 st.markdown(banner, unsafe_allow_html=True)
 
-st.session_state['df'] = load_data('data/data_science_salaries.csv')
-st.session_state['dfGDP'] = load_country_gdp_data("data/country_gdp_data.csv")
-st.session_state['dfCombined'] = combined_df()
-st.session_state['dfNumeric'] = get_numeric_df(st.session_state['dfCombined'])
+try:
+    from datacleaner import load_data, load_country_gdp_data, combined_df, get_numeric_df
+
+    if glob.glob("data/data_science_salaries.*"):
+        st.session_state['df'] = load_data('data/data_science_salaries.csv')
+    else:
+        raise FileNotFoundError("File not found")
+    if glob.glob("data/country_gdp_data.*"):
+        st.session_state['dfGDP'] = load_country_gdp_data("data/country_gdp_data.csv")
+    else:
+        raise FileNotFoundError("File not found")
+    st.session_state['dfCombined'] = combined_df()
+    st.session_state['dfNumeric'] = get_numeric_df(st.session_state['dfCombined'])
+except:
+    st.error("Error loading data. Please make sure the data files are in the data folder and try again. \n\n The data folder should contain: \n\n data_science_salaries.csv \n\n country_gdp_data.csv")
+    st.error("If these errors persist, feel free to contact the developers at cph-mk797@cphbusiness.dk")
