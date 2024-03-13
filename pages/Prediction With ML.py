@@ -136,11 +136,6 @@ with tab1:
 with tab2:
     st.title("Clustering")
 
-    if st.button("Fix NS_ERROR_FAILURE or a white box below"): # This is a workaround for a bug in Streamlit. I can't figure out why the error appears, but reloading the data fixes it
-        dfCluster = dfCluster.sample(frac=1).reset_index(drop=True)
-        st.write("Page should be fixed now...")
-
-
    # Dropdown for Job Title
     job_title_input = st.selectbox("Job Title", df['job_title'].unique() )
 
