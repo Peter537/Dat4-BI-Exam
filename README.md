@@ -27,6 +27,7 @@ Tasks:
 [x] Write Regression theory
 [x] Check language consistency
 [x] Clean up project
+[] Save Regressor as pkl
 
 ## Questions
 
