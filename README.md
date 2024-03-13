@@ -23,6 +23,7 @@ Tasks:
 [] Use new data to regress
 [] Implement Classification in Streamlit
 [] Implement Regression in Streamlit
+[] Write DataProcessing theory
 [] Write Cluster theory
 [] Write Classification theory
 [] Write Regression theory
