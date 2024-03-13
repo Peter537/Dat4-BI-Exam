@@ -86,6 +86,17 @@ except Exception as e:
 
 tab1, tab2, tab3, tab4 = st.tabs(["About", "Regression", "Clustering", "Classification"])
 
+with tab1:
+    st.title("About")
+    
+    st.write("Each tab contains a model that has already been trained and is ready to be used. Following the 'prediction' part, there is a section explaining what model is used and how accurate it is.")
+    st.write("The data used for the models is a combination of two datasets: one containing salary data and the other containing information on countries. From the second dataset, the GDP per capita is used to create a new feature in the first dataset.")
+    st.write("The data can be seen below, containg both the GDP and the result of clustering:")
+
+    dfCombined = st.session_state['dfCombined']
+    dfCombined['cluster'] = rowCluster['cluster']
+    st.write(dfCombined)
+
 # ------------------- Regression -------------------
 
 with tab2:
@@ -318,14 +329,3 @@ with tab4:
         st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
 
     st.title("Classification Analysis")
-
-with tab1:
-    st.title("About")
-    
-    st.write("Each tab contains a model that has already been trained and is ready to be used. Following the 'prediction' part, there is a section explaining what model is used and how accurate it is.")
-    st.write("The data used for the models is a combination of two datasets: one containing salary data and the other containing information on countries. From the second dataset, the GDP per capita is used to create a new feature in the first dataset.")
-    st.write("The data can be seen below, containg both the GDP and the result of clustering:")
-
-    dfCombined = st.session_state['dfCombined']
-    dfCombined['cluster'] = rowCluster['cluster']
-    st.write(dfCombined)
