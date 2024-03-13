@@ -25,7 +25,6 @@ Tasks:
 [] Write Cluster theory
 [] Write Classification theory
 [] Write Regression theory
-[] Write project description
 [] Check language consistency
 [] Clean up project
 
