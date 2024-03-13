@@ -202,6 +202,8 @@ with tab2:
     from yellowbrick.cluster import SilhouetteVisualizer
     visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
     visualizer.fit(X)
+    visualizer._ax.set_xlabel("Silhouette Coefficient Values")
+    visualizer._ax.set_ylabel("Cluster label")
     fig = visualizer._fig
     st.pyplot(fig)
     st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
