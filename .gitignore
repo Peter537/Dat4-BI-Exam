@@ -164,3 +164,4 @@ cython_debug/
 data/cluster.csv
 classification.pkl
 cluster.pkl
+regression.pkl

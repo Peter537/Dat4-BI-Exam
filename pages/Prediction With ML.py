@@ -38,11 +38,11 @@ try:
         # Splitting the data into features (X) and target variable (y)
         X = dfNum.drop('salary_in_usd', axis=1)
         y = dfNum['salary_in_usd']
-
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=83)
 
-        rf_regressor = RandomForestRegressor(n_estimators=50, random_state=116)
-        rf_regressor.fit(X_train, y_train)
+        regression = RandomForestRegressor(n_estimators=50, random_state=116)
+        regression.fit(X_train, y_train)
+        pickle.dump(regression, open("regression.pkl", "wb"))
         pass
 
     if glob.glob("cluster.pkl") and glob.glob("data/cluster.csv"):
@@ -99,14 +99,8 @@ with tab1:
     if (st.button("Predict Salary")):
 #        new_data_point = ng.create_input_row('Marketing Data Scientist', 'Senior-level', 'United States', dfNum.columns)
         new_data_point = ng.create_input_row(job_title_input, experience_level_input, company_location_input, dfNum.columns)
-
-        predicted_salary = rf_regressor.predict(new_data_point)[0]
-
+        predicted_salary = regression.predict(new_data_point)[0]
         st.write(f'Predicted Salary: {predicted_salary} USD')
-
-    y_pred = rf_regressor.predict(X_test)
-    rmse = root_mean_squared_error(y_test, y_pred)
-    r2 = round(r2_score(y_test, y_pred) * 100, 2)
 
     st.title("Random Forest Regressor Analysis")
     st.write("We use a Regression model to predict the salary, because we need to predict the relationship between independent variables and dependent variables. The independent variables are the job title, experience level and company location, and the dependent variable is the salary in USD.")
@@ -114,11 +108,11 @@ with tab1:
     st.write("We use Random Forest Regressor instead of other Regressors, because it is a very powerful and accurate algorithm. It works by training many decisiong trees, which means we will get a better prediction using this model than other comparable models.")
     st.write("\n")
 
-    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is {rmse:.2f} USD.")
-    st.write(f"Since our salary data is between {y.min()} USD and {y.max()} USD, it isn't the best model, because it could be significantly off.")
+    st.write(f"The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is 48344.79 USD.")
+    st.write(f"Since our salary data is between 15.000 USD and 357.900 USD, it isn't the best model, because it could be significantly off.")
     st.write("\n")
 
-    st.write(f"R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is {r2}%, this means that our model can explain {r2}% of the variance in the dependent variable.")
+    st.write(f"R squared (R2) is the proportion of the variance in the dependent variable which is predictable from the independent variable. Since our R2 score is 41.28%, this means that our model can explain 41.28% of the variance in the dependent variable.")
 
 with tab2:
     st.title("Clustering")
