@@ -339,11 +339,14 @@ with tab4:
 
     st.write("The classification model is used to predict the salary of a new data point based on the cluster it belongs to and by doing so returns a value reprsenting a possible value within the range of the cluster")
 
-    st.write("We have trained this model with salary as the dependent variable to predict based on every other column in the dataset as the independent variables. Our model has an accuracy (explained variance) of 0.053% which is very low.")
-    st.write("Although the model has a low accuracy, it still bases its prediction variance based on the  variance within the cluster the data point belongs to, therefore the model is still better than random guessing.")
+    st.write("We have trained this model with salary as the dependent variable to predict based on every other column in the dataset as the independent variables.")
+
+    st.write("Our model has an accuracy (explained variance) of 0.053% which is very low")
+
+    st.write("Although the model has a low accuracy, it still bases its prediction variance based on the variance in the cluster the data point belongs to, therefore the model-output is still better than random guessing.")
 
 
-    st.write("The Root Mean Squared Error (RMSE) gives the average salary deviation from the actual salary values, which is ~77.388 USD, which is arguably acceptable as our data ranges from 15.000 USD to nearly 358.000 USD.")
+    st.write("The Root Mean Squared Error (RMSE) gives the average salary deviation, which is ~77.388 USD for this model. This measure is arguably acceptable as our data ranges from 15.000 USD to nearly 358.000 USD.")
 
 
 
