@@ -175,6 +175,8 @@ with tab3:
     df = st.session_state["df"]
     st.write("Classification")
 
+    st.title("Classification Analysis")
+
 with tab4:
     st.write("About")
     
