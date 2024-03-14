@@ -10,6 +10,7 @@ import glob
 from sklearn.ensemble import RandomForestRegressor
 import newRowGenerator as ng
 import matplotlib.pyplot as plt
+
 st.set_page_config(
     page_title="Prediction With ML",
     page_icon="🧊",
@@ -27,6 +28,7 @@ classification = None
 kmeans = None
 dfCluster = st.session_state['dfNumeric'].drop(['gdp_per_capita'], axis=1)
 dfClassification = st.session_state['dfNumeric'].copy()
+dfClassification = dfClassification.drop(['salary_in_usd'], axis=1)
 # To remove the columns that are not needed for the classification model
 dfNum = st.session_state['dfNumeric'].copy()
 dfCombined = st.session_state['dfCombined']
@@ -113,7 +115,7 @@ with tab2:
     company_location_input = st.selectbox("Company Locations", df['company_location'].unique())
 
     if (st.button("Predict Salary")):
-        new_data_point = ng.create_input_row(job_title_input, experience_level_input, company_location_input, dfNum.columns)
+        new_data_point = ng.create_input_row(job_title_input, experience_level_input, company_location_input, dfNum)
         predicted_salary = regression.predict(new_data_point)[0]
         st.write(f"Predicted Salary: {predicted_salary:.2f} USD")
 
@@ -158,48 +160,13 @@ with tab3:
 
     # Dropdown for Company Size
     company_size_input = st.selectbox("Company Size", df['company_size'].unique())
-    
-    def createNewRow(job_title, experience_level, company_location, work_model, work_year, salaryUSD, employment_type, company_size):
-
-        inputs = {}
-
-        # Directly assign values for columns without prefixes
-        direct_columns = ['work_year', 'salary_in_usd']
-        direct_values = [work_year, salaryUSD]
-
-        for direct_column, direct_value in zip(direct_columns, direct_values):
-            inputs[direct_column] = direct_value
-
-        prefixes = ['job_title_', 'experience_level_', 'company_location_', 'work_models_', 'employment_type_', 'company_size_']
-
-        # Iterate through prefixes and input values to create the input dictionary
-        for prefix, value in zip(prefixes, [job_title, experience_level, company_location, work_model, employment_type, company_size]):
-            column_name = f"{prefix}{value}"
-            if column_name in dfCluster.columns:
-                inputs[column_name] = 1
-                # Set all other columns with the same prefix to 0
-                for col in dfCluster.columns:
-                    if col.startswith(prefix) and col != column_name:
-                        inputs[col] = 0
-
-        # Convert the dictionary to a Series and then to a DataFrame
-        input_row = pd.Series(inputs)
-        input_row = pd.DataFrame([input_row])
-
-        # Ensure the input_row has the same columns as dfCluster
-        input_row = input_row.reindex(columns=dfCluster.columns, fill_value=0)
-
-        st.write(input_row)
-
-        return input_row
-
 
 
     X = dfCluster.copy()
 
     if (st.button("Predict cluster")):
-        prediction = createNewRow(job_title_input, experience_level_input, company_location_input, work_model_input,
-                                   work_year_input, salaryUSD_input, employment_type_input, company_size_input)
+        prediction = ng.createNewRow(job_title_input, experience_level_input, company_location_input, work_model_input,
+                                   work_year_input, salaryUSD_input, employment_type_input, company_size_input, dfCluster)
         
         st.write("The predicted cluster for the selected data is: " + kmeans.predict(prediction).__str__())
         # clusters = pd.DataFrame('Cluster': kmeans) something like this to combine the clusters with the original df.
@@ -291,75 +258,22 @@ with tab4:
     # Dropdown for cluster
     cluster_input2 = st.selectbox("Cluster", df['cluster'].unique(), key='class_cluster')
 
-   
-    def createNewClassRow(job_title2, experience_level2, company_location2, work_model2, work_year2, employment_type2, company_size2, cluster_input2):
-
-        inputs = {}
-
-        gdp = dfCombined[dfCombined['company_location'] ==  company_location2]['gdp_per_capita'][0]
-
-        st.write(gdp)
-
-        # Directly assign values for columns without prefixes
-        direct_columns = ['work_year', 'cluster', 'gdp_per_capita']
-        direct_values = [work_year2, cluster_input2, gdp]
-
-        for direct_column, direct_value in zip(direct_columns, direct_values):
-            inputs[direct_column] = direct_value
-
-        prefixes = ['job_title_', 'experience_level_', 'company_location_', 'work_models_', 'employment_type_', 'company_size_']
-
-        # Iterate through prefixes and input values to create the input dictionary
-        for prefix, value in zip(prefixes, [job_title2, experience_level2, company_location2, work_model2, employment_type2, company_size2, cluster_input2, gdp]):
-            column_name = f"{prefix}{value}"
-            if column_name in dfClassification.columns:
-                inputs[column_name] = 1
-                # Set all other columns with the same prefix to 0
-                for col in dfClassification.columns:
-                    if col.startswith(prefix) and col != column_name:
-                        inputs[col] = 0
-
-        # Convert the dictionary to a Series and then to a DataFrame
-        input_row = pd.Series(inputs)
-        input_row = pd.DataFrame([input_row])
-
-        # Ensure the input_row has the same columns as dfCluster
-        input_row = input_row.reindex(columns=dfClassification.columns, fill_value=0)
-
-        st.write(input_row)
-
-        return input_row
 
     if (st.button("Predict salary")):
-        prediction = createNewClassRow(job_title_input2, experience_level_input2, company_location_input2, work_model_input2,
-                                   work_year_input2, employment_type_input2, company_size_input2, cluster_input2)
+        prediction = ng.createNewClassRow(job_title_input2, experience_level_input2, company_location_input2, work_model_input2,
+                                   work_year_input2, employment_type_input2, company_size_input2, cluster_input2, dfCombined, dfClassification)
         st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
 
     st.title("Classification Analysis")
 
-    st.write("The classification model is used to predict the salary of a new data point based on the cluster it belongs to and by doing so returns a value reprsenting a possible value within the range of the cluster")
-
-    st.write("We have trained this model with salary as the dependent variable to predict based on every other column in the dataset as the independent variables.")
-
-    st.write("Our model has an accuracy (explained variance) of 0.053% which is very low")
-
-    st.write("Although the model has a low accuracy, it still bases its prediction variance based on the variance in the cluster the data point belongs to, therefore the model-output is still better than random guessing.")
+    st.write("The classification model is used to predict the salary of a new data point based on the cluster we attach it to, which then returns a salary representing a possible value within the range of the cluster. We have trained this model with salary as the dependent variable to be predicted, based on every other column in the dataset as the independent variables.")
 
 
-    st.write("The Root Mean Squared Error (RMSE) gives the average salary deviation, which is ~77.388 USD for this model. This measure is arguably acceptable as our data ranges from 15.000 USD to nearly 358.000 USD.")
+    st.write("The Root Mean Squared Error (RMSE) gives the average salary-value deviation, which is ~77.388 USD for this model. This measure is arguably acceptable as our data ranges from 15.000 USD to nearly 358.000 USD.")
+
+    st.write("Our model has an R2 score (accuracy) of 0.053% which is very low. It means that the model is able to explain 0.053% of the dependent variable. In other words our model has a high chance of failing, and will fail within the RMSE range.")
 
 
-
+    st.write("Although the model has a low accuracy score, it still bases its prediction on the salary-range within the cluster the data point belongs to, therefore the model-output is still better than random guessing.")
 
     
-
-with tab4:
-    st.title("About")
-    
-    st.write("Each tab contains a model that has already been trained and is ready to be used. Following the 'prediction' part, there is a section explaining what model is used and how accurate it is.")
-    st.write("The data used for the models is a combination of two datasets: one containing salary data and the other containing information on countries. From the second dataset, the GDP per capita is used to create a new feature in the first dataset.")
-    st.write("The data can be seen below, containing both the GDP and the result of clustering:")
-
-    dfCombined = st.session_state['dfCombined']
-    dfCombined['cluster'] = rowCluster['cluster']
-    st.write(dfCombined)
