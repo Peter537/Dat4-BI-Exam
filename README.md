@@ -20,7 +20,7 @@ We believe that the salary is affected by the job type and the experience level 
 
 Tasks:
 
-[] Implement Classification in Streamlit
+[x] Implement Classification in Streamlit
 [x] Write DataProcessing theory
 [x] Write Cluster theory
 [] Write Classification theory
@@ -28,7 +28,7 @@ Tasks:
 [x] Check language consistency
 [x] Clean up project
 [x] Write in the about tab
-[] Save Regressor as pkl
+[x] Save Regressor as pkl
 
 ## Questions
 
