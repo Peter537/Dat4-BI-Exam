@@ -276,21 +276,5 @@ with tab4:
 
     st.write("Although the model has a low accuracy score, it still bases its prediction on the salary-range within the cluster the data point belongs to, therefore the model-output is still better than random guessing.")
 
-    dfClassification = st.session_state['dfNumeric'].copy()
-    rowCluster = pd.read_csv("data/cluster.csv")
-    dfClassification['cluster'] = rowCluster['cluster']
-
-    X = dfClassification.drop(['salary_in_usd'], axis=1)
-    y = dfClassification['salary_in_usd']
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=88)
-
-    classification = DecisionTreeClassifier(random_state=10)
-    classification.fit(X_train, y_train)
-
-    st.write("Accuracy: ", classification.score(X_test, y_test))
-    st.write("RMSE:", root_mean_squared_error(y_test, classification.predict(X_test)))
-    st.write("Classes: ", classification.classes_)
-
     
     
