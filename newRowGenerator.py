@@ -71,8 +71,6 @@ def createNewClassRow(job_title2, experience_level2, company_location2, work_mod
 
     gdp = dfCombined[dfCombined['company_location'] ==  company_location2]['gdp_per_capita'][0]
 
-    st.write(gdp)
-
     # Directly assign values for columns without prefixes
     direct_columns = ['work_year', 'cluster', 'gdp_per_capita']
     direct_values = [work_year2, cluster_input2, gdp]
