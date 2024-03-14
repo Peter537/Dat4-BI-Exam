@@ -179,47 +179,48 @@ with tab3:
     
     st.write("The silhouette score of the model can be visualised as follows:")
 
-    from yellowbrick.cluster import SilhouetteVisualizer
-    visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
-    visualizer.fit(X)
-    visualizer._ax.set_xlabel("Silhouette Coefficient Values")
-    visualizer._ax.set_ylabel("Cluster label")
-    fig = visualizer._fig
-    st.pyplot(fig)
-    st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
+    if(st.button("Show Silhouette/Elbow Scores")):
+        from yellowbrick.cluster import SilhouetteVisualizer
+        visualizer = SilhouetteVisualizer(kmeans, colors='yellowbrick')
+        visualizer.fit(X)
+        visualizer._ax.set_xlabel("Silhouette Coefficient Values")
+        visualizer._ax.set_ylabel("Cluster label")
+        fig = visualizer._fig
+        st.pyplot(fig)
+        st.write("The silhouette score of the model is: " + round(visualizer.silhouette_score_*100, 2).__str__() + "%")
 
-    st.write("For this cluster, a few possible sizes were considered as seen below in the silhouette score and elbow graph:")
+        st.write("For this cluster, a few possible sizes were considered as seen below in the silhouette score and elbow graph:")
 
-    row = st.columns([1, 1])
-    krange = range(2, 12)
-    with row[0]:
-        scores = []
-        for k in krange:
-            model = KMeans(init='k-means++', n_clusters=k, n_init=10, random_state=42).fit(X)
-            model.fit(X)
-            score = silhouette_score(X, model.labels_, metric='euclidean', sample_size=len(X))
-            scores.append(score)
+        row = st.columns([1, 1])
+        krange = range(2, 12)
+        with row[0]:
+            scores = []
+            for k in krange:
+                model = KMeans(init='k-means++', n_clusters=k, n_init=10, random_state=42).fit(X)
+                model.fit(X)
+                score = silhouette_score(X, model.labels_, metric='euclidean', sample_size=len(X))
+                scores.append(score)
 
-        plot = plt.figure()
-        plt.plot(krange, scores, 'bx-')
-        plt.xlabel('K')
-        plt.ylabel('Silhouette Score')
-        st.pyplot(plot)
+            plot = plt.figure()
+            plt.plot(krange, scores, 'bx-')
+            plt.xlabel('K')
+            plt.ylabel('Silhouette Score')
+            st.pyplot(plot)
 
-    with row[1]:
-        distortions = []
-        K = krange
-        for k in K:
-            model = KMeans(n_clusters=k, n_init=10).fit(X)
-            model.fit(X)
-            distortions.append(model.inertia_)
-        
-        plot2 = plt.figure()
-        plt.title('Elbow Method for Optimal K')
-        plt.plot(K, distortions, 'bx-')
-        plt.xlabel('K')
-        plt.ylabel('Distortion')
-        st.pyplot(plot2)
+        with row[1]:
+            distortions = []
+            K = krange
+            for k in K:
+                model = KMeans(n_clusters=k, n_init=10).fit(X)
+                model.fit(X)
+                distortions.append(model.inertia_)
+            
+            plot2 = plt.figure()
+            plt.title('Elbow Method for Optimal K')
+            plt.plot(K, distortions, 'bx-')
+            plt.xlabel('K')
+            plt.ylabel('Distortion')
+            st.pyplot(plot2)
     
     st.write("The amount of cluster numbers tested is limited to 11 as the significance of the clusters will be lost at a larger amount.")
 
@@ -275,4 +276,21 @@ with tab4:
 
     st.write("Although the model has a low accuracy score, it still bases its prediction on the salary-range within the cluster the data point belongs to, therefore the model-output is still better than random guessing.")
 
+    dfClassification = st.session_state['dfNumeric'].copy()
+    rowCluster = pd.read_csv("data/cluster.csv")
+    dfClassification['cluster'] = rowCluster['cluster']
+
+    X = dfClassification.drop(['salary_in_usd'], axis=1)
+    y = dfClassification['salary_in_usd']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=88)
+
+    classification = DecisionTreeClassifier(random_state=10)
+    classification.fit(X_train, y_train)
+
+    st.write("Accuracy: ", classification.score(X_test, y_test))
+    st.write("RMSE:", root_mean_squared_error(y_test, classification.predict(X_test)))
+    st.write("Classes: ", classification.classes_)
+
+    
     
