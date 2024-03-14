@@ -69,6 +69,8 @@ try:
         rowCluster = pd.read_csv("data/cluster.csv")
         dfClassification['cluster'] = rowCluster['cluster']
     else:
+
+        dfClassification = st.session_state['dfNumeric'].copy()
         rowCluster = pd.read_csv("data/cluster.csv")
         dfClassification['cluster'] = rowCluster['cluster']
 
