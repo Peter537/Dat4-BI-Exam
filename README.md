@@ -35,6 +35,10 @@ Our mission is to empower students and professionals to make informed decisions 
 
 We anticipate that salary is influenced by the job title, the employee's experience level, and the job's location. Additionally, we expect a correlation between the job's location impact on salary and the country's general performance, measured by GDP per capita.
 
+## User Testing
+
+We have conducted a user testing with one user, who gave is good feedback for how to improve our application. For instance, the user commented on the way we described our models, and also gave us good feedback for what to move around in the application so it would be more user friendly and better described.
+
 ## Questions
 
 1. As an Employee, looking at the data, which factors factors affect my salary?
