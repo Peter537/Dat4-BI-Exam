@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import root_mean_squared_error, r2_score, silhouette_score
+from sklearn.metrics import root_mean_squared_error, silhouette_score
 import pickle
 import glob
 from sklearn.ensemble import RandomForestRegressor
@@ -17,8 +16,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-
 
 df = st.session_state['df']
 
