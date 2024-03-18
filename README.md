@@ -41,7 +41,7 @@ We have conducted a user testing with one user, who gave is good feedback for ho
 
 ## Questions
 
-1. As an Employee, looking at the data, which factors factors affect my salary?
+1. As an Employee, looking at the data, which factors affect my salary?
 2. Does GDP per capita of the Country have an effect on salary?
 3. As an Employee, I want to know how much I should earn.
 4. What parameters affect the salary the most?
