@@ -68,8 +68,7 @@ def createNewRow(job_title, experience_level, company_location, work_model, work
 def createNewClassRow(job_title2, experience_level2, company_location2, work_model2, work_year2, employment_type2, company_size2, cluster_input2, dfCombined, dfClassification):
 
     inputs = {}
-
-    gdp = dfCombined[dfCombined['company_location'] ==  company_location2]['gdp_per_capita'][0]
+    gdp = dfCombined[dfCombined['company_location'] ==  company_location2]['gdp_per_capita'].head(1).values[0]
 
     # Directly assign values for columns without prefixes
     direct_columns = ['work_year', 'cluster', 'gdp_per_capita']
