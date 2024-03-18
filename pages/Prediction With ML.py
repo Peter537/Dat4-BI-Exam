@@ -185,7 +185,6 @@ with tab3:
         dftitlespercluster.append(dfclusters[i].filter(regex=prefix).sum().sort_values(ascending=False).head(5))
     
     dftitles = pd.DataFrame()
-    st.write("The top 5 job titles per cluster are as follows:")
     for i in range(9): 
         title1 = dftitlespercluster[i].index[0].replace('job_title_', '')
         title2 = dftitlespercluster[i].index[1].replace('job_title_', '')
