@@ -300,13 +300,24 @@ with tab4:
         prediction = ng.createNewClassRow(job_title_input2, experience_level_input2, company_location_input2, work_model_input2,
                                    work_year_input2, employment_type_input2, company_size_input2, cluster_input2, dfCombined, dfClassification)
         st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
-        gr_data = tree.export_graphviz(classification,
-                                       feature_names=dfClassification.columns, class_names=True,
-                                       filled=True, rounded=True, proportion=False, special_characters=True)
-        dtree = graphviz.Source(gr_data)
-        dtree.render("tree", format="svg", cleanup=True)
-        st.image("tree.svg")
         
+    if(st.button("Show Decision Tree")):
+        try:
+            if glob.glob("tree.svg"):
+                st.image("tree.svg")
+            else:
+                raise Exception("No tree found")
+        except Exception as e:
+                
+            gr_data = tree.export_graphviz(classification,
+                                    feature_names=dfClassification.columns, class_names=True,
+                                    filled=True, rounded=True, proportion=False, special_characters=True)
+            dtree = graphviz.Source(gr_data)
+            dtree.render("tree", format="svg", cleanup=True)
+            st.image("tree.svg")
+            
+
+            
 
     st.title("Classification Analysis")
 
