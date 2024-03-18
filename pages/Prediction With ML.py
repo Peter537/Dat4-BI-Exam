@@ -9,6 +9,8 @@ import glob
 from sklearn.ensemble import RandomForestRegressor
 import newRowGenerator as ng
 import matplotlib.pyplot as plt
+import graphviz
+from sklearn import tree
 
 st.set_page_config(
     page_title="Prediction With ML",
@@ -297,6 +299,12 @@ with tab4:
         prediction = ng.createNewClassRow(job_title_input2, experience_level_input2, company_location_input2, work_model_input2,
                                    work_year_input2, employment_type_input2, company_size_input2, cluster_input2, dfCombined, dfClassification)
         st.write("The predicted salary for the selected data is: " + classification.predict(prediction).__str__())
+        gr_data = tree.export_graphviz(classification, out_file=None,
+                                       feature_names=dfClassification.columns, class_names=True,
+                                       filled=True, rounded=True, proportion=False, special_characters=True)
+        dtree = graphviz.Source(gr_data)
+        st.pyplot(dtree)
+        
 
     st.title("Classification Analysis")
 
