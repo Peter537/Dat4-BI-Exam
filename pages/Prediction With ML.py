@@ -195,8 +195,9 @@ with tab3:
         salarymean = round(dfclusters[i]['salary_in_usd'].mean(), 2)
         salarymax = round(dfclusters[i]['salary_in_usd'].max(), 2)
         salarymin = round(dfclusters[i]['salary_in_usd'].min(), 2)
+        salarydev = round(dfclusters[i]['salary_in_usd'].std(), 2)
 
-        temp = pd.DataFrame({'Cluster': i, 'Title 1': title1, 'Title 2': title2, 'Title 3': title3, 'Title 4': title4, 'Title 5': title5, 'Mean salary in USD': salarymean, 'Max salary in USD': salarymax, 'Min salary in USD': salarymin}, index=[0])
+        temp = pd.DataFrame({'Cluster': i, 'Title 1': title1, 'Title 2': title2, 'Title 3': title3, 'Title 4': title4, 'Title 5': title5, 'Mean salary in USD': salarymean, 'Max salary in USD': salarymax, 'Min salary in USD': salarymin, 'Deviation salary in USD': salarydev}, index=[0])
         if i == 0:
             dftitles = temp
         else:
