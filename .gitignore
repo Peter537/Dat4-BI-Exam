@@ -166,3 +166,4 @@ classification.pkl
 cluster.pkl
 regression.pkl
 tree.png
+tree.svg
