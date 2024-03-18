@@ -304,8 +304,8 @@ with tab4:
                                        feature_names=dfClassification.columns, class_names=True,
                                        filled=True, rounded=True, proportion=False, special_characters=True)
         dtree = graphviz.Source(gr_data)
-        dtree.render("tree", format="png", cleanup=True)
-        st.image("tree.png")
+        dtree.render("tree", format="svg", cleanup=True)
+        st.image("tree.svg")
         
 
     st.title("Classification Analysis")
