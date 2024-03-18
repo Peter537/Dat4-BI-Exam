@@ -169,6 +169,40 @@ with tab3:
         
         st.write("The predicted cluster for the selected data is: " + kmeans.predict(prediction).__str__())
         # clusters = pd.DataFrame('Cluster': kmeans) something like this to combine the clusters with the original df.
+    
+    dftest = st.session_state['dfNumeric'].copy()
+    rowCluster = pd.read_csv("data/cluster.csv")
+    dftest['cluster'] = rowCluster['cluster']
+
+    dftest = dftest.sort_values(by='cluster')
+    
+    dfclusters = []
+    dftitlespercluster = []
+
+    for i in range(9):
+        dfclusters.append(dftest[dftest['cluster'] == i])
+        prefix = 'job_title_'
+        dftitlespercluster.append(dfclusters[i].filter(regex=prefix).sum().sort_values(ascending=False).head(5))
+    
+    dftitles = pd.DataFrame()
+    st.write("The top 5 job titles per cluster are as follows:")
+    for i in range(9): 
+        title1 = dftitlespercluster[i].index[0].replace('job_title_', '')
+        title2 = dftitlespercluster[i].index[1].replace('job_title_', '')
+        title3 = dftitlespercluster[i].index[2].replace('job_title_', '')
+        title4 = dftitlespercluster[i].index[3].replace('job_title_', '')
+        title5 = dftitlespercluster[i].index[4].replace('job_title_', '')
+        salarymean = round(dfclusters[i]['salary_in_usd'].mean(), 2)
+        salarymax = round(dfclusters[i]['salary_in_usd'].max(), 2)
+        salarymin = round(dfclusters[i]['salary_in_usd'].min(), 2)
+
+        temp = pd.DataFrame({'Cluster': i, 'Title 1': title1, 'Title 2': title2, 'Title 3': title3, 'Title 4': title4, 'Title 5': title5, 'Mean salary in USD': salarymean, 'Max salary in USD': salarymax, 'Min salary in USD': salarymin}, index=[0])
+        if i == 0:
+            dftitles = temp
+        else:
+            dftitles = pd.concat([dftitles, temp])
+    
+    st.write(dftitles)
 
     st.title("KMeans Clustering Analysis")
 
